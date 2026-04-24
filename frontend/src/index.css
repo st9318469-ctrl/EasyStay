@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Make form typing readable across the app */
+input,
+textarea,
+select {
+  color: #1A1A18;
+  caret-color: #1A1A18;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #B4B2A9;
+  opacity: 1;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  color-scheme: light;
+}
