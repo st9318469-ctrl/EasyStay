@@ -1,129 +1,110 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+});
 
-// Get all properties
+// Attach token automatically to every request if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// --- Properties ---
+
 export const getProperties = async (filters = {}) => {
-    try {
-        const queryParams = new URLSearchParams(filters).toString();
-        const url = `${API_URL}/api/properties${queryParams ? `?${queryParams}` : ''}`;
-        const response = await axios.get(url);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching properties:', error);
-        throw error;
-    }
+  try {
+    const queryParams = new URLSearchParams(filters).toString();
+    const url = `/api/properties${queryParams ? `?${queryParams}` : ''}`;
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    throw error;
+  }
 };
 
-// Get single property
 export const getProperty = async (id) => {
-    try {
-        const response = await axios.get(`${API_URL}/api/properties/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching property:', error);
-        throw error;
-    }
+  try {
+    const response = await api.get(`/api/properties/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    throw error;
+  }
 };
 
-// Create property (for hosts)
 export const createProperty = async (propertyData) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post(`${API_URL}/api/properties`, propertyData, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error creating property:', error);
-        throw error;
-    }
+  try {
+    const response = await api.post('/api/properties', propertyData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating property:', error);
+    throw error;
+  }
 };
 
-// Update property
 export const updateProperty = async (id, propertyData) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.put(`${API_URL}/api/properties/${id}`, propertyData, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error updating property:', error);
-        throw error;
-    }
+  try {
+    const response = await api.put(`/api/properties/${id}`, propertyData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating property:', error);
+    throw error;
+  }
 };
 
-// Delete property
 export const deleteProperty = async (id) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.delete(`${API_URL}/api/properties/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error deleting property:', error);
-        throw error;
-    }
+  try {
+    const response = await api.delete(`/api/properties/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting property:', error);
+    throw error;
+  }
 };
 
-// Wishlist functions
+// --- Wishlist ---
+
 export const addToWishlist = async (propertyId) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post(`${API_URL}/api/wishlist`, 
-            { propertyId },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        return response.data;
-    } catch (error) {
-        console.error('Error adding to wishlist:', error);
-        throw error;
-    }
+  try {
+    const response = await api.post('/api/wishlist', { propertyId });
+    return response.data;
+  } catch (error) {
+    console.error('Error adding to wishlist:', error);
+    throw error;
+  }
 };
 
 export const removeFromWishlist = async (propertyId) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error removing from wishlist:', error);
-        throw error;
-    }
+  try {
+    const response = await api.delete(`/api/wishlist/${propertyId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error removing from wishlist:', error);
+    throw error;
+  }
 };
 
 export const getWishlist = async () => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/api/wishlist`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching wishlist:', error);
-        throw error;
-    }
+  try {
+    const response = await api.get('/api/wishlist');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching wishlist:', error);
+    throw error;
+  }
 };
 
 export const checkWishlist = async (propertyId) => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/api/wishlist/check/${propertyId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error checking wishlist:', error);
-        throw error;
-    }
+  try {
+    const response = await api.get(`/api/wishlist/check/${propertyId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error checking wishlist:', error);
+    throw error;
+  }
 };
