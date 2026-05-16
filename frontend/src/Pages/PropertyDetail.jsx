@@ -6,7 +6,11 @@ import ReviewModal from "../components/ReviewModal";
 import PaymentModal from "../components/PaymentModal";
 import MessageHostModal from "../components/MessageHostModal";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const LOCAL_API_URL = "http://localhost:8000";
+const isLocalFrontend =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const API_URL = isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL);
 
 export default function PropertyDetail() {
     const { id } = useParams();
@@ -48,7 +52,12 @@ export default function PropertyDetail() {
             setProperty(response.data.property);
             setPageError("");
         } catch (err) {
-            console.error("Failed to fetch property:", err);
+            console.error("Failed to fetch property:", {
+                apiUrl: API_URL,
+                propertyId: id,
+                status: err?.response?.status,
+                message: err?.response?.data?.message || err.message
+            });
             setPageError("Failed to load property details");
         } finally {
             setLoading(false);
@@ -61,7 +70,12 @@ export default function PropertyDetail() {
             setReviews(response.data.reviews || []);
             setRatingStats(response.data.stats || null);
         } catch (err) {
-            console.error("Error fetching reviews:", err);
+            console.error("Error fetching reviews:", {
+                apiUrl: API_URL,
+                propertyId: id,
+                status: err?.response?.status,
+                message: err?.response?.data?.message || err.message
+            });
         }
     };
 

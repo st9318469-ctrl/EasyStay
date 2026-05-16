@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+const LOCAL_API_BASE_URL = 'http://localhost:8000';
+const isLocalFrontend =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+// In local development, always hit the local backend to avoid stale/incorrect .env endpoints.
+const API_BASE_URL = (
+  isLocalFrontend ? LOCAL_API_BASE_URL : (import.meta.env.VITE_API_URL || LOCAL_API_BASE_URL)
+).replace(/\/+$/, '');
+
 const api = axios.create({
-  baseURL: 'https://easystay-backend-1.onrender.com/',
+  baseURL: API_BASE_URL,
 });
 
 // Attach token automatically to every request if present
@@ -22,7 +32,11 @@ export const getProperties = async (filters = {}) => {
     const response = await api.get(url);
     return response.data;
   } catch (error) {
-    console.error('Error fetching properties:', error);
+    console.error('Error fetching properties:', {
+      baseURL: API_BASE_URL,
+      status: error?.response?.status,
+      message: error?.response?.data?.message || error.message,
+    });
     throw error;
   }
 };
@@ -94,6 +108,11 @@ export const getWishlist = async () => {
     const response = await api.get('/api/wishlist');
     return response.data;
   } catch (error) {
+    // Expired/invalid token should not break public pages.
+    if (error?.response?.status === 401) {
+      localStorage.removeItem('token');
+      return { success: true, wishlist: [] };
+    }
     console.error('Error fetching wishlist:', error);
     throw error;
   }

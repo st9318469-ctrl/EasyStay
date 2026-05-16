@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const LOCAL_API_URL = "http://localhost:8000";
+const isLocalFrontend =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
 
 export default function BookingManagement() {
     const [bookings, setBookings] = useState([]);

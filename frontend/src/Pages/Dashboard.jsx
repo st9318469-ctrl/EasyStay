@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const LOCAL_API_URL = "http://localhost:8000";
+const isLocalFrontend =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
 
 export default function Dashboard() {
     const [bookings, setBookings] = useState([]);
@@ -31,7 +35,11 @@ export default function Dashboard() {
             setBookings(response.data.bookings);
             setCategories(response.data.categories);
         } catch (error) {
-            console.error("Failed to fetch bookings:", error);
+            console.error("Failed to fetch bookings:", {
+                apiUrl: API_URL,
+                status: error?.response?.status,
+                message: error?.response?.data?.message || error.message
+            });
             if (error.response?.status === 401) {
                 navigate("/login");
             }

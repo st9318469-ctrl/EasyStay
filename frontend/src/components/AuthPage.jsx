@@ -8,6 +8,14 @@ const AUTH_IMAGES = [
   "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80",
 ];
 
+const LOCAL_API_URL = "http://localhost:8000";
+const isLocalFrontend =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const API_BASE_URL = (
+  isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)
+).replace(/\/+$/, "");
+
 // OTP Modal Component
 const OTPModal = ({ email, onClose, onSuccess }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -51,8 +59,7 @@ const OTPModal = ({ email, onClose, onSuccess }) => {
     setError('');
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      const response = await axios.post(`${apiUrl}/api/auth/verify-email`, {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/verify-email`, {
         email,
         otp: otpCode
       });
@@ -81,8 +88,7 @@ const OTPModal = ({ email, onClose, onSuccess }) => {
     setError('');
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      await axios.post(`${apiUrl}/api/auth/resend-otp`, { email });
+      await axios.post(`${API_BASE_URL}/api/auth/resend-otp`, { email });
       setCountdown(60);
       setOtp(['', '', '', '', '', '']);
       
@@ -209,8 +215,7 @@ export default function AuthPage() {
     setSubmitting(true);
     setErrors(prev => ({ ...prev, submit: "" }));
 
-    const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-    const url = isLogin ? `${apiBaseUrl}/api/auth/login` : `${apiBaseUrl}/api/auth/register`;
+    const url = isLogin ? `${API_BASE_URL}/api/auth/login` : `${API_BASE_URL}/api/auth/register`;
 
     try {
       const payload = isLogin

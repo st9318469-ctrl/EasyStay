@@ -2,7 +2,11 @@ import { useState } from "react";
 import axios from "axios";
 import BookingSuccessModal from "./BookingSuccessModal";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const LOCAL_API_URL = "http://localhost:8000";
+const isLocalFrontend =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
 
 export default function PaymentModal({ bookingId, amount, bookingDetails, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -118,7 +122,12 @@ export default function PaymentModal({ bookingId, amount, bookingDetails, onClos
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
-      console.error("Payment error:", error);
+      console.error("Payment error:", {
+        apiUrl: API_URL,
+        bookingId,
+        status: error?.response?.status,
+        message: error?.response?.data?.message || error.message,
+      });
       alert(error.response?.data?.message || error.message || "Payment failed. Please try again.");
     } finally {
       setLoading(false);
