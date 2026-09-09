@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { API_BASE_URL } from "../api/config";
 
 export default function MessageHostModal({ host, propertyId, onClose }) {
     const [message, setMessage] = useState("");
@@ -27,7 +26,7 @@ export default function MessageHostModal({ host, propertyId, onClose }) {
         setLoading(true);
         try {
             const conversationRes = await axios.post(
-                `${API_URL}/api/messages/conversations`,
+                `${API_BASE_URL}/api/messages/conversations`,
                 { participantId: host._id, propertyId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -36,7 +35,7 @@ export default function MessageHostModal({ host, propertyId, onClose }) {
             if (!conversationId) throw new Error("Failed to create conversation");
 
             await axios.post(
-                `${API_URL}/api/messages/send`,
+                `${API_BASE_URL}/api/messages/send`,
                 { conversationId, receiverId: host._id, content: message.trim() },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -97,4 +96,3 @@ export default function MessageHostModal({ host, propertyId, onClose }) {
         </div>
     );
 }
-

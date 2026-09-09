@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import api from '../api/axios';
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -25,9 +23,6 @@ export default function Profile() {
     const [updateLoading, setUpdateLoading] = useState(false);
 
     useEffect(() => {
-        fetchProfile();
-    }, []);
-
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -36,9 +31,7 @@ export default function Profile() {
                 return;
             }
             
-            const response = await axios.get(`${API_URL}/api/profile`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.get('/profile');
             
             setUser(response.data.user);
             setFormData({
@@ -56,6 +49,9 @@ export default function Profile() {
             setLoading(false);
         }
     };
+
+    fetchProfile();
+}, [navigate]);
 
     const handleInputChange = (e) => {
         setFormData({
@@ -77,10 +73,7 @@ export default function Profile() {
         setMessage({ text: '', type: '' });
         
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.put(`${API_URL}/api/profile`, formData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.put('/profile', formData);
             
             setUser(response.data.user);
             setEditing(false);
@@ -116,12 +109,9 @@ export default function Profile() {
         setMessage({ text: '', type: '' });
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/profile/change-password`, {
+            await api.put('/profile/change-password', {
                 currentPassword: passwordData.currentPassword,
                 newPassword: passwordData.newPassword
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
             
             setMessage({ text: 'Password changed successfully!', type: 'success' });

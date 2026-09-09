@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+import { API_BASE_URL } from '../api/config';
 
 const OTPVerificationModal = ({ 
     isOpen, 
@@ -64,7 +63,7 @@ const OTPVerificationModal = ({
                 return;
             }
 
-            const endpoint = `${API_URL}/api/auth/verify-email`;
+            const endpoint = `${API_BASE_URL}/api/auth/verify-email`;
             
             const response = await axios.post(endpoint, {
                 email,
@@ -98,7 +97,7 @@ const OTPVerificationModal = ({
                 return;
             }
 
-            const endpoint = `${API_URL}/api/auth/resend-otp`;
+            const endpoint = `${API_BASE_URL}/api/auth/resend-otp`;
             
             const response = await axios.post(endpoint, { email });
             

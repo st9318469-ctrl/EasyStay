@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import api from '../api/axios';
 
 const amenitiesList = [
     "wifi", "pool", "ac", "kitchen", "parking", "tv", 
@@ -108,10 +106,7 @@ export default function AddProperty() {
         };
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(`${API_URL}/api/properties`, propertyData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.post('/properties', propertyData);
 
             if (response.data.success) {
                 navigate('/host-dashboard');

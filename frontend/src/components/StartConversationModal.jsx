@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import { API_BASE_URL } from '../api/config';
 
 export default function StartConversationModal({ hostId, hostName, propertyId, propertyTitle, onClose }) {
     const [message, setMessage] = useState('');
@@ -15,7 +14,7 @@ export default function StartConversationModal({ hostId, hostName, propertyId, p
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${API_URL}/api/messages/conversations`, {
+            const response = await axios.post(`${API_BASE_URL}/api/messages/conversations`, {
                 participantId: hostId,
                 propertyId,
                 bookingId: null
@@ -24,7 +23,7 @@ export default function StartConversationModal({ hostId, hostName, propertyId, p
             });
             
             // Send first message
-            await axios.post(`${API_URL}/api/messages/send`, {
+            await axios.post(`${API_BASE_URL}/api/messages/send`, {
                 conversationId: response.data.conversation._id,
                 receiverId: hostId,
                 content: message

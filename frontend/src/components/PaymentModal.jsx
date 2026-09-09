@@ -1,12 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import BookingSuccessModal from "./BookingSuccessModal";
-
-const LOCAL_API_URL = "http://localhost:8000";
-const isLocalFrontend =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
+import { API_BASE_URL } from "../api/config";
 
 export default function PaymentModal({ bookingId, amount, bookingDetails, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -27,7 +22,7 @@ export default function PaymentModal({ bookingId, amount, bookingDetails, onClos
 
   const confirmWithMethod = async (payload) => {
     const token = localStorage.getItem("token");
-    const response = await axios.put(`${API_URL}/api/bookings/${bookingId}/payment`, payload, {
+    const response = await axios.put(`${API_BASE_URL}/api/bookings/${bookingId}/payment`, payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
@@ -62,7 +57,7 @@ export default function PaymentModal({ bookingId, amount, bookingDetails, onClos
       }
 
       const orderRes = await axios.post(
-        `${API_URL}/api/payments/create-order`,
+        `${API_BASE_URL}/api/payments/create-order`,
         { bookingId, paymentMethod },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -91,7 +86,7 @@ export default function PaymentModal({ bookingId, amount, bookingDetails, onClos
         handler: async (response) => {
           try {
             const verifyRes = await axios.post(
-              `${API_URL}/api/payments/verify`,
+              `${API_BASE_URL}/api/payments/verify`,
               {
                 bookingId,
                 razorpay_order_id: response.razorpay_order_id,
@@ -118,12 +113,11 @@ export default function PaymentModal({ bookingId, amount, bookingDetails, onClos
         },
       };
 
-      // eslint-disable-next-line no-undef
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
       console.error("Payment error:", {
-        apiUrl: API_URL,
+        apiUrl: API_BASE_URL,
         bookingId,
         status: error?.response?.status,
         message: error?.response?.data?.message || error.message,

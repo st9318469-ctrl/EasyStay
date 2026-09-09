@@ -16,6 +16,8 @@ import AddProperty from './Pages/AddProperty';
 import ForgotPassword from './Pages/ForgotPassword';
 import Messages from './Pages/Messages';
 import AccountSettings from './Pages/AccountSettings';
+import AdminDashboard from './Pages/AdminDashboard';
+import EditProperty from './Pages/EditProperty';
 
 
 // Protected Route Component (for authenticated users)
@@ -35,8 +37,22 @@ const HostRoute = ({ children }) => {
     if (!token) {
         return <Navigate to="/login" replace />;
     }
-    if (user.role !== 'host') {
+    if (user.role !== 'host' && user.role !== 'admin') {
         return <Navigate to="/my-trips" replace />;
+    }
+    return children;
+};
+
+// Admin Route Component (only for users with admin role)
+const AdminRoute = ({ children }) => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (!token) {
+        return <Navigate to="/login" replace />;
+    }
+    if (user.role !== 'admin') {
+        return <Navigate to="/" replace />;
     }
     return children;
 };
@@ -107,24 +123,34 @@ const App = () => {
                     } 
                 />
                 
-                {/* Protected Host Routes - For property owners */}
-                <Route 
-                    path="/host-dashboard" 
-                    element={
-                        <HostRoute>
-                            <HostDashboard />
-                        </HostRoute>
-                    } 
-                />
-                
                 {/* Redirect old dashboard to new one */}
-                <Route 
-                    path="/dashboard" 
+                <Route
+                    path="/dashboard"
                     element={
                         <ProtectedRoute>
                             <Navigate to="/my-trips" replace />
                         </ProtectedRoute>
-                    } 
+                    }
+                />
+
+                {/* Admin Route */}
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminRoute>
+                            <AdminDashboard />
+                        </AdminRoute>
+                    }
+                />
+
+                {/* Edit Property Route */}
+                <Route
+                    path="/edit-property/:id"
+                    element={
+                        <HostRoute>
+                            <EditProperty />
+                        </HostRoute>
+                    }
                 />
             </Routes>
             <Footer />

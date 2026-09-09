@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const LOCAL_API_URL = "http://localhost:8000";
-const isLocalFrontend =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
+import { API_BASE_URL } from '../api/config';
 
 export default function BookingManagement() {
-    const [bookings, setBookings] = useState([]);
     const [categories, setCategories] = useState({});
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('upcoming');
@@ -22,10 +16,9 @@ export default function BookingManagement() {
     const fetchBookings = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
+            const response = await axios.get(`${API_BASE_URL}/api/bookings/my-bookings`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setBookings(response.data.bookings);
             setCategories(response.data.categories);
         } catch (error) {
             console.error('Failed to fetch bookings:', error);
@@ -39,7 +32,7 @@ export default function BookingManagement() {
         
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/bookings/${bookingId}/cancel`, 
+            await axios.put(`${API_BASE_URL}/api/bookings/${bookingId}/cancel`, 
                 { reason: 'Cancelled by user' },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

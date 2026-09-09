@@ -1,20 +1,13 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api/config";
 
 const AUTH_IMAGES = [
   "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80",
 ];
-
-const LOCAL_API_URL = "http://localhost:8000";
-const isLocalFrontend =
-  typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-const API_BASE_URL = (
-  isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)
-).replace(/\/+$/, "");
 
 // OTP Modal Component
 const OTPModal = ({ email, onClose, onSuccess }) => {
@@ -170,6 +163,7 @@ const OTPModal = ({ email, onClose, onSuccess }) => {
 export default function AuthPage() {
   const instanceId = useId();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(true);
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -182,6 +176,16 @@ export default function AuthPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [pendingEmail, setPendingEmail] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('sessionExpired') === '1') {
+      setErrors((prev) => ({
+        ...prev,
+        submit: 'Session expired. Please log in again.',
+      }));
+    }
+  }, [location.search]);
 
   const img = useMemo(() => {
     let hash = 0;

@@ -1,0 +1,83 @@
+already done things - 
+
+user registration/login with otp email verifcation 
+
+forgot pass flow
+
+property listing and property detail pages
+
+host can add/delete properties
+
+guest can book a property
+
+date availbility blocking exists
+
+wishlsit exists
+
+reviews exist
+
+messaging with socket.io
+
+payment code exists for razorpay/upi style flow 
+
+## REMAINING works ##
+
+1. right now booking is created as confirmed imm , even thoguh payment is still pending 
+
+2.Your review system only allows reviews for bookings with status: 'completed', but I did not see a proper flow that automatically marks bookings as completed after checkout.
+
+3.Host dashboard shows stats and properties, but it does not properly show incoming bookings from guests.
+
+Host Dashboard → My Bookings
+
+Host should see:
+- guest name
+- property booked
+- check-in/check-out
+- payment status
+- booking status
+- cancel/confirm/complete action
+
+4. Edit property page is missing
+There is a button going to:
+[HostDashboard.jsx (line 168)](C:/Users/HP/Documents/EasySTAY/frontend/src/components/HostDashboard.jsx:168)
+navigate(`/edit-property/${property._id}`)
+
+But I did not see a route for /edit-property/:id in:
+
+So clicking Edit may lead to a blank/missing page. You should either build EditProperty.jsx or remove the button.
+
+5. Admin panel is missing
+For final year, this will make your project look much more complete.
+Add admin features:
+- view all users
+- view all properties
+- approve/reject properties
+- view all bookings
+- delete fake listings
+- manage complaints/reports
+
+6. Calendar field mismatch
+Your property model uses unavailableDates, but one controller function still reads bookedDates:
+[propertyController.js (line 40)](C:/Users/HP/Documents/EasySTAY/backend/controllers/propertyController.js:40)
+That can make calendar availability wrong. Use one system everywhere, preferably unavailableDates.
+
+7. Payment security issue
+This line is okay for a demo, but not realistic:
+[bookingController.js (line 336)](C:/Users/HP/Documents/EasySTAY/backend/controllers/bookingController.js:336)
+// If client sends paymentStatus, trust it (for now)
+For final project, explain it as “simulated payment,” or make only backend/payment verification update the booking to paid.
+
+
+
+
+
+
+1. Add proper booking status lifecycle.
+2. Add host booking management.
+3. Add edit property page.
+4. Add admin panel.
+5. Fix calendar field mismatch.
+6. Fix broken symbols/UI polish.
+7. Add README with project explanation, tech stack, features, and screenshots.
+Your project is not empty or weak. It already has a good base. Now you need to make the flows feel complete and explainable for viva.

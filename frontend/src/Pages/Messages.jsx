@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { API_BASE_URL } from '../api/config';
 
 export default function Messages() {
     const [conversations, setConversations] = useState([]);
@@ -20,16 +19,58 @@ export default function Messages() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const initialConversationId = location.state?.conversationId;
 
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
+    const fetchConversations = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${API_BASE_URL}/api/messages/conversations`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setConversations(response.data.conversations);
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const fetchMessages = useCallback(async (conversationId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${API_BASE_URL}/api/messages/${conversationId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setMessages(response.data.messages);
+            scrollToBottom();
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }, [scrollToBottom]);
+
+    const markAsRead = useCallback(async (conversationId) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`${API_BASE_URL}/api/messages/${conversationId}/read`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (error) {
+            console.error('Error marking as read:', error);
+        }
+    }, []);
+
     useEffect(() => {
         // Connect to socket
-        const newSocket = io(API_URL);
+        const newSocket = io(API_BASE_URL);
         setSocket(newSocket);
 
         return () => newSocket.close();
     }, []);
 
     useEffect(() => {
-        if (socket && user.id) {
+        if (socket && user?.id) {
             socket.emit('join', user.id);
 
             socket.on('new_message', (message) => {
@@ -53,66 +94,27 @@ export default function Messages() {
                 socket.off('user_typing');
             };
         }
-    }, [socket, selectedConversation]);
+    }, [socket, selectedConversation, user?.id, fetchConversations, markAsRead, scrollToBottom]);
 
     useEffect(() => {
         fetchConversations();
-    }, []);
+    }, [fetchConversations]);
 
     useEffect(() => {
         if (!initialConversationId || !conversations.length) return;
         const found = conversations.find((c) => c._id === initialConversationId);
         if (found) setSelectedConversation(found);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [conversations, initialConversationId]);
 
     useEffect(() => {
         if (selectedConversation) {
             fetchMessages(selectedConversation._id);
         }
-    }, [selectedConversation]);
+    }, [selectedConversation, fetchMessages]);
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
-
-    const fetchConversations = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/messages/conversations`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setConversations(response.data.conversations);
-        } catch (error) {
-            console.error('Error fetching conversations:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const fetchMessages = async (conversationId) => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/messages/${conversationId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setMessages(response.data.messages);
-            scrollToBottom();
-        } catch (error) {
-            console.error('Error fetching messages:', error);
-        }
-    };
-
-    const markAsRead = async (conversationId) => {
-        try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/messages/${conversationId}/read`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-        } catch (error) {
-            console.error('Error marking as read:', error);
-        }
-    };
+    }, [messages, scrollToBottom]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -159,10 +161,6 @@ export default function Messages() {
                 isTyping: false
             });
         }
-    };
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const formatTime = (date) => {
@@ -267,7 +265,7 @@ export default function Messages() {
 
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                                {messages.map((msg, idx) => (
+                                {messages.map((msg) => (
                                     <div
                                         key={msg._id}
                                         className={`flex ${msg.sender?._id === user.id ? 'justify-end' : 'justify-start'}`}

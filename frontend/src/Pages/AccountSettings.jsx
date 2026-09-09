@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import api from '../api/axios';
 
 export default function AccountSettings() {
     const navigate = useNavigate();
@@ -10,6 +8,7 @@ export default function AccountSettings() {
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState('profile');
     const [settings, setSettings] = useState({});
+    const [activity, setActivity] = useState({ totalBookings: 0, totalReviews: 0, recentBookings: [] });
     const [message, setMessage] = useState({ text: '', type: '' });
     
     // Profile form
@@ -47,49 +46,53 @@ export default function AccountSettings() {
     const [deleteLoading, setDeleteLoading] = useState(false);
 
     useEffect(() => {
-        fetchSettings();
-    }, []);
+        const fetchSettings = async () => {
+            try {
+                const [settingsRes, activityRes] = await Promise.all([
+                    api.get('/settings'),
+                    api.get('/settings/activity').catch(() => ({ data: { activity: {} } }))
+                ]);
 
-    const fetchSettings = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`${API_URL}/api/settings`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            
-            const data = response.data.settings;
-            setSettings(data);
-            
-            setProfileForm({
-                name: data.profile?.name || '',
-                phone: data.profile?.phone || '',
-                bio: data.profile?.bio || '',
-                location: data.profile?.location || ''
-            });
-            
-            setNotificationSettings(data.notifications || {});
-            setPrivacySettings(data.privacy || {});
-            setPreferences(data.preferences || {});
-            
-        } catch (error) {
-            console.error('Error fetching settings:', error);
-            if (error.response?.status === 401) {
-                navigate('/login');
+                const data = settingsRes.data.settings;
+                setSettings(data);
+
+                setProfileForm({
+                    name: data.profile?.name || '',
+                    phone: data.profile?.phone || '',
+                    bio: data.profile?.bio || '',
+                    location: data.profile?.location || ''
+                });
+
+                setNotificationSettings(data.notifications || {});
+                setPrivacySettings(data.privacy || {});
+                setPreferences(data.preferences || {});
+
+                const act = activityRes.data.activity || {};
+                setActivity({
+                    totalBookings: act.totalBookings || 0,
+                    totalReviews: act.totalReviews || 0,
+                    recentBookings: act.recentBookings || []
+                });
+
+            } catch (error) {
+                console.error('Error fetching settings:', error);
+                if (error.response?.status === 401) {
+                    navigate('/login');
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
+
+        fetchSettings();
+    }, [navigate]);
 
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
         setSaving(true);
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/settings/profile`, profileForm, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await api.put('/settings/profile', profileForm);
             
             setMessage({ text: 'Profile updated successfully!', type: 'success' });
             setTimeout(() => setMessage({ text: '', type: '' }), 3000);
@@ -110,10 +113,7 @@ export default function AccountSettings() {
         setSaving(true);
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/settings/notifications`, notificationSettings, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await api.put('/settings/notifications', notificationSettings);
             
             setMessage({ text: 'Notification settings updated!', type: 'success' });
             setTimeout(() => setMessage({ text: '', type: '' }), 3000);
@@ -129,10 +129,7 @@ export default function AccountSettings() {
         setSaving(true);
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/settings/privacy`, privacySettings, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await api.put('/settings/privacy', privacySettings);
             
             setMessage({ text: 'Privacy settings updated!', type: 'success' });
             setTimeout(() => setMessage({ text: '', type: '' }), 3000);
@@ -148,10 +145,7 @@ export default function AccountSettings() {
         setSaving(true);
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.put(`${API_URL}/api/settings/preferences`, preferences, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await api.put('/settings/preferences', preferences);
             
             setMessage({ text: 'Preferences updated!', type: 'success' });
             setTimeout(() => setMessage({ text: '', type: '' }), 3000);
@@ -172,10 +166,8 @@ export default function AccountSettings() {
         setDeleteLoading(true);
         
         try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`${API_URL}/api/settings/account`, {
-                data: { password: deletePassword },
-                headers: { Authorization: `Bearer ${token}` }
+            await api.delete('/settings/account', {
+                data: { password: deletePassword }
             });
             
             localStorage.removeItem('token');
@@ -523,18 +515,18 @@ export default function AccountSettings() {
                                     
                                     <div className="grid grid-cols-2 gap-4 mb-6">
                                         <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                            <p className="text-2xl font-bold" style={{ color: "#1A1A18" }}>{settings.totalBookings || 0}</p>
+                                            <p className="text-2xl font-bold" style={{ color: "#1A1A18" }}>{activity.totalBookings}</p>
                                             <p className="text-sm text-gray-500">Total Bookings</p>
                                         </div>
                                         <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                            <p className="text-2xl font-bold" style={{ color: "#1A1A18" }}>{settings.totalReviews || 0}</p>
+                                            <p className="text-2xl font-bold" style={{ color: "#1A1A18" }}>{activity.totalReviews}</p>
                                             <p className="text-sm text-gray-500">Reviews Written</p>
                                         </div>
                                     </div>
                                     
                                     <h3 className="font-semibold mb-3">Recent Activity</h3>
                                     <div className="space-y-3">
-                                        {settings.recentBookings?.slice(0, 5).map(booking => (
+                                        {activity.recentBookings.slice(0, 5).map(booking => (
                                             <div key={booking._id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                                                 <div className="w-10 h-10 rounded-lg overflow-hidden">
                                                     <img src={booking.property?.images?.[0]?.url} alt="" className="w-full h-full object-cover" />

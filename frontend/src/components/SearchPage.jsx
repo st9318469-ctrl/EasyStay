@@ -4,8 +4,8 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import { getProperties } from "../api/propertyService";
+import { API_BASE_URL } from "../api/config";
 
 const allAmenities = ["wifi", "pool", "ac", "kitchen", "parking", "tv", "fireplace", "bbq", "breakfast", "gym"];
 const propertyTypes = ["villa", "cabin", "apartment", "cottage", "hotel", "resort"];
@@ -68,16 +68,21 @@ function MapPreview({ properties }) {
       for (const property of properties.slice(0, 40)) {
         const lat = Number(property?.location?.coordinates?.lat);
         const lng = Number(property?.location?.coordinates?.lng);
+        const legacyLat = Number(property?.location?.lat);
+        const legacyLng = Number(property?.location?.lng);
 
-        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        const resolvedLat = Number.isFinite(lat) ? lat : legacyLat;
+        const resolvedLng = Number.isFinite(lng) ? lng : legacyLng;
+
+        if (Number.isFinite(resolvedLat) && Number.isFinite(resolvedLng)) {
           rawPins.push({
             id: property._id,
             title: property.title,
             price: property.price,
             city: property?.location?.city,
             country: property?.location?.country,
-            lat,
-            lng,
+            lat: resolvedLat,
+            lng: resolvedLng,
           });
           continue;
         }
@@ -297,6 +302,7 @@ export default function SearchPage() {
   const location = useLocation();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
   const [wishlist, setWishlist] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState([]);
@@ -332,10 +338,20 @@ export default function SearchPage() {
   const fetchProperties = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/api/properties`);
-      setProperties(response.data.properties);
+      setFetchError("");
+      const response = await getProperties();
+      const list = Array.isArray(response?.properties)
+        ? response.properties
+        : Array.isArray(response?.data?.properties)
+          ? response.data.properties
+          : Array.isArray(response)
+            ? response
+            : [];
+      setProperties(list);
     } catch (error) {
       console.error("Error fetching properties:", error);
+      setProperties([]);
+      setFetchError("Could not load properties. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -346,7 +362,7 @@ export default function SearchPage() {
     if (!token) return;
     
     try {
-      const response = await axios.get(`${API_URL}/api/wishlist`, {
+      const response = await axios.get(`${API_BASE_URL}/api/wishlist`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const wishlistIds = response.data.wishlist.map(item => item.property._id);
@@ -365,12 +381,12 @@ export default function SearchPage() {
     
     try {
       if (wishlist.includes(propertyId)) {
-        await axios.delete(`${API_URL}/api/wishlist/${propertyId}`, {
+        await axios.delete(`${API_BASE_URL}/api/wishlist/${propertyId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setWishlist(wishlist.filter(id => id !== propertyId));
       } else {
-        await axios.post(`${API_URL}/api/wishlist`, 
+        await axios.post(`${API_BASE_URL}/api/wishlist`, 
           { propertyId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -452,6 +468,11 @@ export default function SearchPage() {
           <h1 style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)", fontWeight: "800", color: "#1A1A18", fontFamily: "Georgia,serif" }}>
             Find Your Stay
           </h1>
+          {fetchError && (
+            <p style={{ marginTop: "8px", fontSize: "12px", color: "#E24B4A" }}>
+              {fetchError}
+            </p>
+          )}
         </div>
 
         {/* Search Bar */}

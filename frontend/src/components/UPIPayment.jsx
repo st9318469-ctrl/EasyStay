@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../api/config';
 
 export default function UPIPayment({ amount, bookingId, onSuccess, onClose }) {
     const [paymentStatus, setPaymentStatus] = useState('pending');
@@ -20,26 +22,27 @@ export default function UPIPayment({ amount, bookingId, onSuccess, onClose }) {
         return upiUrl;
     };
 
-    // Simulate payment verification (in production, this would call your backend)
-    const verifyPayment = async (transactionId) => {
+    // Verify UPI payment via backend
+    const verifyPayment = async () => {
         setLoading(true);
         
         try {
-            // Simulate API call to verify payment
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // In production, call your backend to verify payment
-            // const response = await axios.post(`${API_URL}/api/payments/verify-upi`, {
-            //     bookingId,
-            //     transactionId
-            // });
-            
+            const token = localStorage.getItem('token');
+            const response = await axios.post(
+                `${API_BASE_URL}/api/payments/verify-upi`,
+                { bookingId, transactionId, amount },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            if (!response.data?.success) {
+                throw new Error(response.data?.message || 'Verification failed');
+            }
+
             setPaymentStatus('success');
             
-            // Show success message
             setTimeout(() => {
-                onSuccess();
-                onClose();
+                onSuccess?.();
+                onClose?.();
                 navigate('/my-trips');
             }, 2000);
             
@@ -53,7 +56,7 @@ export default function UPIPayment({ amount, bookingId, onSuccess, onClose }) {
 
     const handleManualVerification = () => {
         if (transactionId.length >= 6) {
-            verifyPayment(transactionId);
+            verifyPayment();
         }
     };
 

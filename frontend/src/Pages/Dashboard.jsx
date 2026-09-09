@@ -1,26 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-const LOCAL_API_URL = "http://localhost:8000";
-const isLocalFrontend =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
+import { API_BASE_URL } from "../api/config";
 
 export default function Dashboard() {
-    const [bookings, setBookings] = useState([]);
     const [categories, setCategories] = useState({});
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('upcoming');
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    useEffect(() => {
-        fetchBookings();
-    }, []);
-
-    const fetchBookings = async () => {
+    // Extracted fetch function wrapped with useCallback
+    const fetchBookings = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -28,36 +19,39 @@ export default function Dashboard() {
                 return;
             }
             
-            const response = await axios.get(`${API_URL}/api/bookings/my-bookings`, {
+            const response = await axios.get(`${API_BASE_URL}/api/bookings/my-bookings`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
-            setBookings(response.data.bookings);
-            setCategories(response.data.categories);
+            setCategories(response.data.categories || {});
         } catch (error) {
             console.error("Failed to fetch bookings:", {
-                apiUrl: API_URL,
+                apiUrl: API_BASE_URL,
                 status: error?.response?.status,
                 message: error?.response?.data?.message || error.message
             });
-            if (error.response?.status === 401) {
+            if (error?.response?.status === 401) {
                 navigate("/login");
             }
         } finally {
             setLoading(false);
         }
-    };
+    }, [navigate]);
+
+    useEffect(() => {
+        fetchBookings();
+    }, [fetchBookings]);
 
     const handleCancelBooking = async (bookingId) => {
-        if (!confirm("Are you sure you want to cancel this booking?")) return;
+        if (!window.confirm("Are you sure you want to cancel this booking?")) return;
         
         try {
             const token = localStorage.getItem("token");
-            await axios.put(`${API_URL}/api/bookings/${bookingId}/cancel`, {}, {
+            await axios.put(`${API_BASE_URL}/api/bookings/${bookingId}/cancel`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Booking cancelled successfully!");
-            fetchBookings(); // Refresh the list
+            fetchBookings(); // Now accessible without scope errors
         } catch (error) {
             alert(error.response?.data?.message || "Failed to cancel booking");
         }
@@ -172,7 +166,7 @@ export default function Dashboard() {
                                     <div className="md:w-48 h-48">
                                         <img
                                             src={booking.property?.images?.[0]?.url || "https://via.placeholder.com/200x200"}
-                                            alt={booking.property?.title}
+                                            alt={booking.property?.title || "Property Image"}
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
@@ -182,10 +176,10 @@ export default function Dashboard() {
                                         <div className="flex justify-between items-start mb-4">
                                             <div>
                                                 <h3 className="text-xl font-bold mb-1" style={{ color: "#1A1A18" }}>
-                                                    {booking.property?.title}
+                                                    {booking.property?.title || "Property Details Unavailable"}
                                                 </h3>
                                                 <p className="text-sm" style={{ color: "#5F5E5A" }}>
-                                                    📍 {booking.property?.location?.city}, {booking.property?.location?.country}
+                                                    📍 {booking.property?.location?.city || 'N/A'}, {booking.property?.location?.country || 'N/A'}
                                                 </p>
                                             </div>
                                             {getStatusBadge(booking.status)}
@@ -196,38 +190,38 @@ export default function Dashboard() {
                                             <div>
                                                 <p className="text-xs" style={{ color: "#B4B2A9" }}>Check In</p>
                                                 <p className="font-medium" style={{ color: "#1A1A18" }}>
-                                                    {new Date(booking.checkIn).toLocaleDateString('en-US', { 
+                                                    {booking.checkIn ? new Date(booking.checkIn).toLocaleDateString('en-US', { 
                                                         month: 'short', 
                                                         day: 'numeric', 
                                                         year: 'numeric' 
-                                                    })}
+                                                    }) : 'N/A'}
                                                 </p>
                                             </div>
                                             <div>
                                                 <p className="text-xs" style={{ color: "#B4B2A9" }}>Check Out</p>
                                                 <p className="font-medium" style={{ color: "#1A1A18" }}>
-                                                    {new Date(booking.checkOut).toLocaleDateString('en-US', { 
+                                                    {booking.checkOut ? new Date(booking.checkOut).toLocaleDateString('en-US', { 
                                                         month: 'short', 
                                                         day: 'numeric', 
                                                         year: 'numeric' 
-                                                    })}
+                                                    }) : 'N/A'}
                                                 </p>
                                             </div>
                                             <div>
                                                 <p className="text-xs" style={{ color: "#B4B2A9" }}>Guests</p>
-                                                <p className="font-medium" style={{ color: "#1A1A18" }}>{booking.guests} guests</p>
+                                                <p className="font-medium" style={{ color: "#1A1A18" }}>{booking.guests || 0} guests</p>
                                             </div>
                                             <div>
                                                 <p className="text-xs" style={{ color: "#B4B2A9" }}>Total Price</p>
                                                 <p className="font-bold" style={{ color: "#1A1A18" }}>
-                                                    ₹{booking.totalPrice?.toLocaleString()}
+                                                    ₹{booking.totalPrice ? booking.totalPrice.toLocaleString() : '0'}
                                                 </p>
                                             </div>
                                         </div>
                                         
                                         {/* Booking Date */}
                                         <div className="text-xs mb-4" style={{ color: "#B4B2A9" }}>
-                                            Booked on: {new Date(booking.createdAt).toLocaleDateString()}
+                                            Booked on: {booking.createdAt ? new Date(booking.createdAt).toLocaleDateString() : 'N/A'}
                                         </div>
                                         
                                         {/* Action Buttons */}

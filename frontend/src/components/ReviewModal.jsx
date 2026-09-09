@@ -1,8 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import StarRating from "./StarRating";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { API_BASE_URL } from "../api/config";
 
 export default function ReviewModal({ propertyId, propertyTitle, onClose, onSuccess }) {
   const [rating, setRating] = useState(5);
@@ -32,7 +31,7 @@ export default function ReviewModal({ propertyId, propertyTitle, onClose, onSucc
 
     try {
       const response = await axios.post(
-        `${API_URL}/api/reviews`,
+        `${API_BASE_URL}/api/reviews`,
         { propertyId, rating, comment: comment.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -128,4 +127,3 @@ export default function ReviewModal({ propertyId, propertyTitle, onClose, onSucc
     </div>
   );
 }
-

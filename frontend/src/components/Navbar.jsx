@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import api from "../api/axios";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -68,6 +70,22 @@ export default function Navbar() {
     setUser(null);
     setProfileOpen(false);
     navigate('/');
+  };
+
+  const handleBecomeHost = async () => {
+    setProfileOpen(false);
+    setMobileOpen(false);
+    try {
+      const res = await api.put('/auth/become-host');
+      if (res.data?.success) {
+        const updatedUser = res.data.user;
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        navigate('/host-dashboard');
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to become a host. Please try again.');
+    }
   };
 
   const getUserInitial = () => {
@@ -364,28 +382,39 @@ export default function Navbar() {
                     </span>
                   </li>
                   
-                  {/* Host Dashboard - Only show if user is a host */}
-                  {user?.role === 'host' && (
+                  {/* Admin Dashboard - Only show if user is admin */}
+                  {user?.role === 'admin' && (
                     <>
                       <li>
                         <span
-                          onClick={() => {
-                            setProfileOpen(false);
-                            navigate("/host-dashboard");
-                          }}
+                          onClick={() => { setProfileOpen(false); navigate('/admin'); }}
+                          style={{ display: 'block', padding: '10px 14px', fontSize: '13px', color: '#dc2626', borderRadius: '10px', cursor: 'pointer', transition: 'all 0.15s ease', fontWeight: 700 }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.color = '#FAFAF8'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#dc2626'; }}
+                        >
+                          🛡️ Admin Panel
+                        </span>
+                      </li>
+                      <li><hr style={{ margin: '4px 8px', borderColor: 'rgba(26,26,24,0.08)' }} /></li>
+                    </>
+                  )}
+
+                  {/* Host Dashboard - Only show if user is a host */}
+                  {(user?.role === 'host' || user?.role === 'admin') && (
+                    <>
+                      <li>
+                        <span
+                          onClick={() => { setProfileOpen(false); navigate("/host-dashboard"); }}
                           style={{ display: "block", padding: "10px 14px", fontSize: "13px", color: "#1A1A18", borderRadius: "10px", cursor: "pointer", transition: "all 0.15s ease" }}
                           onMouseEnter={e => { e.currentTarget.style.background = "#1A1A18"; e.currentTarget.style.color = "#FAFAF8"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A18"; }}
                         >
-                  {"\u{1F3E0}"} Host Dashboard
+                          {"\u{1F3E0}"} Host Dashboard
                         </span>
                       </li>
                       <li>
                         <span
-                          onClick={() => {
-                            setProfileOpen(false);
-                            navigate("/add-property");
-                          }}
+                          onClick={() => { setProfileOpen(false); navigate("/add-property"); }}
                           style={{ display: "block", padding: "10px 14px", fontSize: "13px", color: "#1A1A18", borderRadius: "10px", cursor: "pointer", transition: "all 0.15s ease" }}
                           onMouseEnter={e => { e.currentTarget.style.background = "#1A1A18"; e.currentTarget.style.color = "#FAFAF8"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A18"; }}
@@ -394,6 +423,20 @@ export default function Navbar() {
                         </span>
                       </li>
                     </>
+                  )}
+
+                  {/* Become a Host - Only show for regular users */}
+                  {user?.role === 'user' && (
+                    <li>
+                      <span
+                        onClick={handleBecomeHost}
+                        style={{ display: "block", padding: "10px 14px", fontSize: "13px", color: "#1A1A18", borderRadius: "10px", cursor: "pointer", transition: "all 0.15s ease" }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "#1A1A18"; e.currentTarget.style.color = "#FAFAF8"; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A18"; }}
+                      >
+                        {"\u{1F3E1}"} Become a Host
+                      </span>
+                    </li>
                   )}
                   
                   {/* Account Settings */}
@@ -529,7 +572,18 @@ export default function Navbar() {
 
           {isLoggedIn ? (
             <>
-              {user?.role === 'host' && (
+              {user?.role === 'admin' && (
+                <span
+                  onClick={() => { setMobileOpen(false); navigate('/admin'); }}
+                  className="block px-4 py-2.5 text-sm font-bold rounded-lg cursor-pointer transition-all duration-150"
+                  style={{ color: '#dc2626' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; e.currentTarget.style.color = '#FAFAF8'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#dc2626'; }}
+                >
+                  🛡️ Admin Panel
+                </span>
+              )}
+              {(user?.role === 'host' || user?.role === 'admin') && (
                 <span
                   onClick={() => { setMobileOpen(false); navigate("/host-dashboard"); }}
                   className="block px-4 py-2.5 text-sm font-bold rounded-lg cursor-pointer transition-all duration-150"
@@ -538,6 +592,17 @@ export default function Navbar() {
                   onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A18"; }}
                 >
                   {"\u{1F3E0}"} Host Dashboard
+                </span>
+              )}
+              {user?.role === 'user' && (
+                <span
+                  onClick={handleBecomeHost}
+                  className="block px-4 py-2.5 text-sm font-bold rounded-lg cursor-pointer transition-all duration-150"
+                  style={{ color: "#1A1A18" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "#1A1A18"; e.currentTarget.style.color = "#FAFAF8"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#1A1A18"; }}
+                >
+                  {"\u{1F3E1}"} Become a Host
                 </span>
               )}
               <span

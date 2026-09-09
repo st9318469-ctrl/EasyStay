@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-const LOCAL_API_URL = "http://localhost:8000";
-const isLocalFrontend =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-const API_URL = (isLocalFrontend ? LOCAL_API_URL : (import.meta.env.VITE_API_URL || LOCAL_API_URL)).replace(/\/+$/, "");
+import { API_BASE_URL } from '../api/config';
 
 export default function ForgotPassword() {
     const navigate = useNavigate();
@@ -28,7 +23,7 @@ export default function ForgotPassword() {
         setError('');
         
         try {
-            const response = await axios.post(`${API_URL}/api/auth/forgot-password`, { email });
+            const response = await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, { email });
             setSuccess(response.data.message);
             setStep(2);
             startCountdown();
@@ -46,7 +41,7 @@ export default function ForgotPassword() {
         setError('');
         
         try {
-            const response = await axios.post(`${API_URL}/api/auth/verify-reset-otp`, { email, otp });
+            const response = await axios.post(`${API_BASE_URL}/api/auth/verify-reset-otp`, { email, otp });
             setResetToken(response.data.resetToken);
             setSuccess('OTP verified! Set your new password.');
             setStep(3);
@@ -75,7 +70,7 @@ export default function ForgotPassword() {
         setError('');
         
         try {
-            await axios.post(`${API_URL}/api/auth/reset-password`, {
+            await axios.post(`${API_BASE_URL}/api/auth/reset-password`, {
                 token: resetToken,
                 newPassword
             });
@@ -97,7 +92,7 @@ export default function ForgotPassword() {
         setError('');
         
         try {
-            await axios.post(`${API_URL}/api/auth/resend-reset-otp`, { email });
+            await axios.post(`${API_BASE_URL}/api/auth/resend-reset-otp`, { email });
             setSuccess('New OTP sent to your email');
             startCountdown();
         } catch (err) {

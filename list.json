@@ -1,0 +1,258 @@
+[
+    {
+        "title": "Oceanview Villa",
+        "description": "Beautiful beachfront villa with stunning ocean views, private pool, and direct beach access. Perfect for family vacations or romantic getaways. Enjoy breathtaking sunsets from your private terrace and wake up to the sound of waves.",
+        "type": "villa",
+        "price": 12500,
+        "location": {
+            "address": "North Male Atoll",
+            "city": "Malé",
+            "country": "Maldives",
+            "state": "",
+            "zipCode": "20026",
+            "coordinates": {
+                "lat": 4.1755,
+                "lng": 73.5093
+            }
+        },
+        "amenities": ["wifi", "pool", "ac", "kitchen", "tv", "parking"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "maxGuests": 4,
+        "rating": 4.9,
+        "totalReviews": 128,
+        "isAvailable": true
+    },
+    {
+        "title": "Mountain Cabin",
+        "description": "Cozy wooden cabin nestled in the mountains with fireplace, stunning valley views, and hiking trails nearby. Perfect for nature lovers and adventure seekers. Experience the tranquility of the Himalayas.",
+        "type": "cabin",
+        "price": 4200,
+        "location": {
+            "address": "Old Manali Road",
+            "city": "Manali",
+            "state": "Himachal Pradesh",
+            "country": "India",
+            "zipCode": "175131",
+            "coordinates": {
+                "lat": 32.2396,
+                "lng": 77.1887
+            }
+        },
+        "amenities": ["wifi", "parking", "ac", "tv", "fireplace"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "maxGuests": 6,
+        "rating": 4.7,
+        "totalReviews": 84,
+        "isAvailable": true
+    },
+    {
+        "title": "City Apartment",
+        "description": "Modern apartment in the heart of the city with stunning skyline views, close to restaurants, shopping, and entertainment. Perfect for business travelers and urban explorers.",
+        "type": "apartment",
+        "price": 3800,
+        "location": {
+            "address": "Bandra West",
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "zipCode": "400050",
+            "coordinates": {
+                "lat": 19.0596,
+                "lng": 72.8295
+            }
+        },
+        "amenities": ["wifi", "ac", "tv", "kitchen", "elevator"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "maxGuests": 2,
+        "rating": 4.8,
+        "totalReviews": 210,
+        "isAvailable": true
+    },
+    {
+        "title": "Beachfront Cottage",
+        "description": "Charming beachfront cottage with private garden, just steps away from the sand. Perfect for relaxation and water sports. Enjoy the vibrant Goan culture and cuisine.",
+        "type": "cottage",
+        "price": 6500,
+        "location": {
+            "address": "Calangute Beach Road",
+            "city": "Goa",
+            "state": "Goa",
+            "country": "India",
+            "zipCode": "403516",
+            "coordinates": {
+                "lat": 15.5439,
+                "lng": 73.7550
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "kitchen", "bbq"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "maxGuests": 4,
+        "rating": 4.6,
+        "totalReviews": 96,
+        "isAvailable": true
+    },
+    {
+        "title": "Heritage Haveli",
+        "description": "Beautifully restored heritage haveli with traditional architecture, courtyard, and authentic Rajasthani hospitality. Experience royal living with modern amenities.",
+        "type": "hotel",
+        "price": 9800,
+        "location": {
+            "address": "Amer Road",
+            "city": "Jaipur",
+            "state": "Rajasthan",
+            "country": "India",
+            "zipCode": "302002",
+            "coordinates": {
+                "lat": 26.9855,
+                "lng": 75.8513
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "breakfast", "tv", "restaurant"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "maxGuests": 8,
+        "rating": 4.9,
+        "totalReviews": 67,
+        "isAvailable": true
+    },
+    {
+        "title": "Alpine Retreat",
+        "description": "Luxurious retreat in the alpine region with panoramic mountain views, spa, and gourmet dining. Perfect for honeymooners and those seeking peace and tranquility.",
+        "type": "resort",
+        "price": 7200,
+        "location": {
+            "address": "Mall Road",
+            "city": "Shimla",
+            "state": "Himachal Pradesh",
+            "country": "India",
+            "zipCode": "171001",
+            "coordinates": {
+                "lat": 31.1048,
+                "lng": 77.1734
+            }
+        },
+        "amenities": ["wifi", "pool", "ac", "gym", "kitchen", "spa"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "maxGuests": 5,
+        "rating": 4.8,
+        "totalReviews": 53,
+        "isAvailable": true
+    },
+    {
+        "title": "Luxury Penthouse",
+        "description": "Spectacular penthouse with 360-degree city views, private rooftop terrace, and premium amenities. The ultimate urban luxury experience.",
+        "type": "apartment",
+        "price": 15000,
+        "location": {
+            "address": "DLF Cyber City",
+            "city": "Gurgaon",
+            "state": "Haryana",
+            "country": "India",
+            "zipCode": "122002",
+            "coordinates": {
+                "lat": 28.4926,
+                "lng": 77.0904
+            }
+        },
+        "amenities": ["wifi", "pool", "ac", "gym", "kitchen", "tv", "elevator"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 3,
+        "maxGuests": 6,
+        "rating": 5.0,
+        "totalReviews": 42,
+        "isAvailable": true
+    },
+    {
+        "title": "Forest Treehouse",
+        "description": "Unique treehouse experience in the middle of a dense forest. Wake up to birds chirping and enjoy nature at its best. Perfect for adventure seekers.",
+        "type": "cabin",
+        "price": 5500,
+        "location": {
+            "address": "Forest Range",
+            "city": "Coorg",
+            "state": "Karnataka",
+            "country": "India",
+            "zipCode": "571201",
+            "coordinates": {
+                "lat": 12.3375,
+                "lng": 75.8069
+            }
+        },
+        "amenities": ["wifi", "parking", "fireplace", "bbq"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "maxGuests": 2,
+        "rating": 4.7,
+        "totalReviews": 38,
+        "isAvailable": true
+    }
+]

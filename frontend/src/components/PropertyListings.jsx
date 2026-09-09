@@ -192,7 +192,12 @@ export default function PropertyListings() {
     try {
       setLoading(true);
       const response = await getProperties();
-      setProperties(response.properties);
+      const list = Array.isArray(response?.properties)
+        ? response.properties
+        : Array.isArray(response?.data?.properties)
+          ? response.data.properties
+          : [];
+      setProperties(list);
       setError("");
     } catch (err) {
       console.error("Failed to fetch properties:", err);
@@ -216,7 +221,7 @@ export default function PropertyListings() {
         .filter(Boolean)
         .map((id) => String(id));
       setWishlist(ids);
-    } catch (err) {
+    } catch {
       setWishlist([]);
     }
   };

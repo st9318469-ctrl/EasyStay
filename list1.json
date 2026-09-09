@@ -1,0 +1,340 @@
+[
+    {
+        "title": "Oceanview Villa",
+        "description": "Experience luxury at this stunning beachfront villa with breathtaking ocean views. Enjoy your morning coffee on the private terrace while watching the sunrise over the crystal-clear waters. The villa features a private infinity pool, direct beach access, and a fully equipped kitchen. Perfect for families or groups looking for a tropical paradise getaway.",
+        "type": "villa",
+        "price": 12500,
+        "location": {
+            "address": "North Male Atoll",
+            "city": "Malé",
+            "country": "Maldives",
+            "state": "",
+            "zipCode": "20026",
+            "coordinates": {
+                "lat": 4.1755,
+                "lng": 73.5093
+            }
+        },
+        "amenities": ["wifi", "pool", "ac", "kitchen", "tv", "parking", "breakfast", "gym"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "maxGuests": 8,
+        "rating": 4.9,
+        "totalReviews": 128,
+        "isAvailable": true
+    },
+    {
+        "title": "Mountain Cabin Retreat",
+        "description": "Escape to this cozy wooden cabin nestled in the serene mountains. Features a warm fireplace, panoramic valley views, and nearby hiking trails. Perfect for nature lovers and those seeking peace and tranquility. Enjoy stargazing from the private deck and wake up to the sound of birds chirping.",
+        "type": "cabin",
+        "price": 4200,
+        "location": {
+            "address": "Old Manali Road",
+            "city": "Manali",
+            "state": "Himachal Pradesh",
+            "country": "India",
+            "zipCode": "175131",
+            "coordinates": {
+                "lat": 32.2396,
+                "lng": 77.1887
+            }
+        },
+        "amenities": ["wifi", "parking", "fireplace", "tv", "heater", "kitchen"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "maxGuests": 6,
+        "rating": 4.7,
+        "totalReviews": 84,
+        "isAvailable": true
+    },
+    {
+        "title": "Luxury City Penthouse",
+        "description": "Spectacular penthouse offering 360-degree city views from a private rooftop terrace. Located in the heart of the business district, this modern apartment features premium amenities, floor-to-ceiling windows, and designer furnishings. Perfect for business travelers and urban explorers.",
+        "type": "apartment",
+        "price": 15000,
+        "location": {
+            "address": "Bandra West",
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "country": "India",
+            "zipCode": "400050",
+            "coordinates": {
+                "lat": 19.0596,
+                "lng": 72.8295
+            }
+        },
+        "amenities": ["wifi", "ac", "tv", "kitchen", "gym", "pool", "elevator", "security"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 3,
+        "maxGuests": 6,
+        "rating": 5.0,
+        "totalReviews": 42,
+        "isAvailable": true
+    },
+    {
+        "title": "Beachfront Paradise Cottage",
+        "description": "Charming beachfront cottage with private garden, just steps away from the golden sand. Perfect for relaxation and water sports. Enjoy the vibrant local culture, fresh seafood, and stunning sunsets. Features a hammock on the veranda and outdoor shower.",
+        "type": "cottage",
+        "price": 6500,
+        "location": {
+            "address": "Calangute Beach Road",
+            "city": "Goa",
+            "state": "Goa",
+            "country": "India",
+            "zipCode": "403516",
+            "coordinates": {
+                "lat": 15.5439,
+                "lng": 73.7550
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "kitchen", "bbq", "beach-access"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "maxGuests": 4,
+        "rating": 4.6,
+        "totalReviews": 96,
+        "isAvailable": true
+    },
+    {
+        "title": "Heritage Palace Haveli",
+        "description": "Experience royal living in this beautifully restored 200-year-old haveli. Features traditional Rajasthani architecture, intricate carvings, a central courtyard, and modern amenities. Enjoy authentic home-cooked meals and cultural performances. A truly unique heritage experience.",
+        "type": "hotel",
+        "price": 9800,
+        "location": {
+            "address": "Amer Road",
+            "city": "Jaipur",
+            "state": "Rajasthan",
+            "country": "India",
+            "zipCode": "302002",
+            "coordinates": {
+                "lat": 26.9855,
+                "lng": 75.8513
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "breakfast", "restaurant", "spa", "library"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1564501049412-61c2a3081a4b?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 4,
+        "bathrooms": 3,
+        "maxGuests": 8,
+        "rating": 4.9,
+        "totalReviews": 67,
+        "isAvailable": true
+    },
+    {
+        "title": "Alpine Ski Resort",
+        "description": "Luxurious alpine retreat with direct ski-in/ski-out access. Features a world-class spa, gourmet restaurant, heated indoor pool, and breathtaking mountain views. Perfect for winter sports enthusiasts and those seeking a cozy mountain escape.",
+        "type": "resort",
+        "price": 7200,
+        "location": {
+            "address": "Mall Road",
+            "city": "Shimla",
+            "state": "Himachal Pradesh",
+            "country": "India",
+            "zipCode": "171001",
+            "coordinates": {
+                "lat": 31.1048,
+                "lng": 77.1734
+            }
+        },
+        "amenities": ["wifi", "pool", "ac", "gym", "kitchen", "spa", "restaurant", "skiing"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "maxGuests": 5,
+        "rating": 4.8,
+        "totalReviews": 53,
+        "isAvailable": true
+    },
+    {
+        "title": "Modern Studio Apartment",
+        "description": "Stylish and modern studio apartment in the city center. Perfect for solo travelers or couples. Features a cozy sleeping area, fully equipped kitchenette, and a balcony with city views. Close to restaurants, cafes, and public transport.",
+        "type": "apartment",
+        "price": 2800,
+        "location": {
+            "address": "MG Road",
+            "city": "Bangalore",
+            "state": "Karnataka",
+            "country": "India",
+            "zipCode": "560001",
+            "coordinates": {
+                "lat": 12.9716,
+                "lng": 77.5946
+            }
+        },
+        "amenities": ["wifi", "ac", "tv", "kitchen", "elevator"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "maxGuests": 2,
+        "rating": 4.5,
+        "totalReviews": 34,
+        "isAvailable": true
+    },
+    {
+        "title": "Forest Treehouse Adventure",
+        "description": "Unique treehouse experience in the middle of a dense forest. Wake up to birds chirping and enjoy nature at its best. Features a rope bridge, outdoor shower, and a canopy walkway. Perfect for adventure seekers and nature lovers.",
+        "type": "cabin",
+        "price": 5500,
+        "location": {
+            "address": "Forest Range",
+            "city": "Coorg",
+            "state": "Karnataka",
+            "country": "India",
+            "zipCode": "571201",
+            "coordinates": {
+                "lat": 12.3375,
+                "lng": 75.8069
+            }
+        },
+        "amenities": ["wifi", "parking", "fireplace", "bbq", "nature-trail"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "maxGuests": 2,
+        "rating": 4.7,
+        "totalReviews": 38,
+        "isAvailable": true
+    },
+    {
+        "title": "Desert Luxury Camp",
+        "description": "Experience the magic of the Thar Desert in this luxurious tented camp. Features traditional Rajasthani hospitality, camel safaris, cultural performances, and stargazing. Each tent has modern amenities while maintaining an authentic desert experience.",
+        "type": "resort",
+        "price": 8500,
+        "location": {
+            "address": "Sam Sand Dunes",
+            "city": "Jaisalmer",
+            "state": "Rajasthan",
+            "country": "India",
+            "zipCode": "345001",
+            "coordinates": {
+                "lat": 26.9124,
+                "lng": 70.9129
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "breakfast", "dinner", "cultural-programs"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1542401886-65d6c61db217?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1547471080-7cc2caa01b4c?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "maxGuests": 2,
+        "rating": 4.9,
+        "totalReviews": 156,
+        "isAvailable": true
+    },
+    {
+        "title": "Backwater Heritage Home",
+        "description": "Traditional Kerala house on the serene backwaters. Experience houseboat rides, authentic Kerala cuisine, and Ayurvedic treatments. Features a private pond, organic garden, and breathtaking sunset views over the water.",
+        "type": "villa",
+        "price": 7200,
+        "location": {
+            "address": "Alleppey",
+            "city": "Kochi",
+            "state": "Kerala",
+            "country": "India",
+            "zipCode": "688001",
+            "coordinates": {
+                "lat": 9.4981,
+                "lng": 76.3388
+            }
+        },
+        "amenities": ["wifi", "pool", "parking", "kitchen", "garden", "backwater-view"],
+        "images": [
+            {
+                "url": "https://images.unsplash.com/photo-1593693397690-3b2d1cfee50c?w=800&auto=format&fit=crop&q=80"
+            },
+            {
+                "url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800&auto=format&fit=crop&q=80"
+            }
+        ],
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "maxGuests": 6,
+        "rating": 4.8,
+        "totalReviews": 92,
+        "isAvailable": true
+    }
+]
